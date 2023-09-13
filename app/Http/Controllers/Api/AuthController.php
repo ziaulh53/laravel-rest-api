@@ -41,7 +41,7 @@ class AuthController extends Controller
         $success = true;
         return response(compact('user', 'token', 'success'));
     }
-    public function  logout(LogoutRequest $request)
+    public function logout(LogoutRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
