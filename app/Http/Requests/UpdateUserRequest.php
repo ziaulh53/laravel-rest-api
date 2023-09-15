@@ -26,6 +26,7 @@ class UpdateUserRequest extends FormRequest
             'name'=>'required',
             'email'=>'required|email|unique:users,email'.$user->id,
             'password'=>'required', 
+            'role'=>'required', 
         ];
     }
 }

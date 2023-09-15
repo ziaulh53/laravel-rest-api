@@ -25,6 +25,7 @@ class StoreUserRequest extends FormRequest
             'name'=>'required',
             'email'=>'required|email|unique:users,email'.$this->id,
             'password'=>'required',
+            'role'=>'required',
         ];
     }
 }

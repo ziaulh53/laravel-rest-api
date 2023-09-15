@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(10));
+        return UserResource::collection(User::where('id', '!=', Auth::user()->id)->where('role', 'admin')->orderBy('id', 'desc')->paginate(10));
     }
 
     /**
@@ -35,9 +36,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-    //    echo new UserResource($user);
+        //    echo new UserResource($user);
 
-       return response(['user'=>new UserResource($user), 'success'=>true], 201);
+        return response(['user' => new UserResource($user), 'success' => true], 201);
         // return new UserResource($user);
     }
 
@@ -47,12 +48,12 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
-        if(isset($data['password'])){
+        if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
         $user->update($data);
 
-        return response(['user'=>new UserResource($user), 'success'=>true], 201);
+        return response(['user' => new UserResource($user), 'success' => true], 201);
     }
 
     /**
@@ -61,6 +62,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response(['message'=>'Deleted successfullu', 'success'=>true], 201);
+        return response(['message' => 'Deleted successfullu', 'success' => true], 201);
     }
 }
